@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: codeorbit-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:////var/data/codeorbit.db
+      - key: DATA_DIR
+        value: /var/data
+      - key: UPLOADS_DIR
+        value: /var/data/uploads
+      - key: STATES_DIR
+        value: /var/data/states
+      - key: REPOS_DIR
+        value: /var/data/repositories
+      - key: RUN_MIGRATIONS_ON_STARTUP
+        value: "true"
+      - key: CORS_ORIGINS
+        value: "*"
+    disk:
+      name: codeorbit-data
+      mountPath: /var/data
+      sizeGB: 1
